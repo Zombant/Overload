@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+
 import json
 from datetime import date
 import sys
 import argparse
+import os
 
 def load_json(file):
     with open(file, 'r') as f:
@@ -106,7 +109,7 @@ def remove_muscle_group(file, muscle_group_name):
 
 if __name__ == "__main__":
     argParser = argparse.ArgumentParser()
-    argParser.add_argument("-f", "--file", action='store', required=True, help="specifies the file")
+    argParser.add_argument("-f", "--file", action='store', required=False, default=os.path.expanduser('~') + "/.local/share/overloadprogress.json", help="specifies the file")
     argParser.add_argument("-p", "--print", action='store_true', required=False, help="print (prints list of muscle groups by default)")
     argParser.add_argument("-n", "--new", action='store_true', required=False, help="create a new log")
     argParser.add_argument("-u", "--upgrade", action='store_true', required=False, help="upgrades an exercise")
