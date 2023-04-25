@@ -67,12 +67,12 @@ def increment_times(file, exercise_to_find):
                 data['overload'][muscle_group][exercise]['current']['times'] = data['overload'][muscle_group][exercise]['current']['times'] + 1
                 export_json(file, data)
 
-def create_exercise(file, exercise_name, muscle_group_name, reps, sets, weight):
+def create_exercise(file, exercise_name, muscle_group_name, reps, sets, weight, times):
     data = load_json(file)
     for muscle_group, _ in data['overload'].items():
         if muscle_group == muscle_group_name:
             if exercise_name not in data['overload'][muscle_group]:
-                data['overload'][muscle_group][exercise_name] = {"current": {"reps": reps, "sets": sets, "weight": weight, "times": 0}, "history": []}
+                data['overload'][muscle_group][exercise_name] = {"current": {"reps": reps, "sets": sets, "weight": weight, "times": times}, "history": []}
                 export_json(file, data)
                 return
             else:
@@ -109,7 +109,7 @@ def remove_muscle_group(file, muscle_group_name):
 
 if __name__ == "__main__":
     argParser = argparse.ArgumentParser()
-    argParser.add_argument("-f", "--file", action='store', required=False, default=os.path.expanduser('~') + "/.local/share/overloadprogress.json", help="specifies the file")
+    argParser.add_argument("-f", "--file", action='store', required=False, default=os.path.expanduser('~') + "/.local/share/overloadprogress.json", help="specifies the file. (default: ~/.local/share/overloadprogress.json")
     argParser.add_argument("-p", "--print", action='store_true', required=False, help="print (prints list of muscle groups by default)")
     argParser.add_argument("-n", "--new", action='store_true', required=False, help="create a new log")
     argParser.add_argument("-u", "--upgrade", action='store_true', required=False, help="upgrades an exercise")
@@ -121,6 +121,7 @@ if __name__ == "__main__":
     argParser.add_argument("-r", "--reps", action='store', type=int, required=False, help="specifies the number of reps")
     argParser.add_argument("-s", "--sets", action='store', type=int, required=False, help="specifies the number of sets")
     argParser.add_argument("-w", "--weight", action='store', type=int, required=False, help="specifies the number of weights")
+    argParser.add_argument("-t", "--times", action='store', type=int, required=False, default=0, help="specifies the number of times completed")
     
     args = argParser.parse_args()
 
@@ -144,6 +145,6 @@ if __name__ == "__main__":
             remove_exercise(args.file, args.exercise)
     elif args.create:
         if args.exercise != None:
-            create_exercise(args.file, args.exercise, args.group, reps=args.reps, sets=args.sets, weight=args.weight)
+            create_exercise(args.file, args.exercise, args.group, reps=args.reps, sets=args.sets, weight=args.weight, times=args.times)
         elif args.group != None:
             create_muscle_group(args.file, args.group)
